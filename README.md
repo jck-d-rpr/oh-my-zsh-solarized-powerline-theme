@@ -40,52 +40,28 @@ See [Antigen](https://github.com/zsh-users/antigen) for more info.
 You can set following options in your .zshrc.
 
 - **Display username:** `SHOW_USER`
-- options:
-	- `true`
-	- `false`
 - default: `true`
 
 
 - **Display IP address or host name:** `SHOW_IP`
-- options:
-	- `true`
-	- `false`
 - default: `true`
 
 - **Display current time:** `SHOW_TIME`
-- options:
-	- `true`
-	- `false`
 - default: `false`
 
 - **Use single line in prompt:** `SINGLE_LINE`
-- options:
-	- `true`
-	- `false`
 - default: `false`
 
 - **Display git status of current repo. For a large git repo, the prompt will be very slow!** `SHOW_GIT_STATUS`
-- options:
-	- `true`
-	- `false`
 - default: `true`
 
 - **Display branch name of current git repo. The priotity of this option is higher than `SHOW_GIT_STATUS`!** `SHOW_GIT_BRAHCH_ONLY`
-- options:
-	- `true`
-	- `false`
 - default: `false`
 
 - **Display return code:** `SHOW_RETURN_CODE`
-- options:
-	- `true`
-	- `false`
 - default: `true`
 
 - **Display symbol of current OS:** `SHOW_OS`
-- options:
-	- `true`
-	- `false`
 - default: `true`
 
 - **The the depth of parant directories:** `DIRECTORY_DEPTH`
@@ -98,5 +74,7 @@ In addition to what to display and what not to you can also select the foregroun
 
 ###Thanks to
 Original project page [Powerline theme for oh-my-zsh](https://github.com/KuoE0/oh-my-zsh-solarized-powerline-theme).
+
 [The color generating script](http://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt) answer by krwoe.
+
 Random symbols in the prompt I first encountered in [here](https://github.com/narendraj9/dotfiles).

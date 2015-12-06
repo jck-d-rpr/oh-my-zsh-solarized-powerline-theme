@@ -77,7 +77,7 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{190]✭%f"
 if [ $OS = "Darwin" ]; then
 	local LOGO=""
 else
-	local LOGO="Linux"
+	local LOGO=""
 fi
 
 # option defaults
