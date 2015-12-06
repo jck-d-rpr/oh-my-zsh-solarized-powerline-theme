@@ -2,9 +2,15 @@
 The Powerline style prompt for oh-my-zsh.
 
 ##Preview
-![powerline prompt](https://raw.github.com/jck-d-rpr/powerline-train/master/preview.png)
-![powerline prompt large](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-larger.png)
+The one with the apple logo
 ![powerline prompt apple](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-apple-logo.png)
+
+The one with with the linux logo
+![powerline prompt](https://raw.github.com/jck-d-rpr/powerline-train/master/preview.png)
+
+Just a larger one
+![powerline prompt large](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-larger.png)
+
 
 ###Requirements
 - Vim Powerline patched font: See [Powerline for vim](https://github.com/Lokaltog/vim-powerline.git) for more info.
@@ -43,32 +49,32 @@ See [Antigen](https://github.com/zsh-users/antigen) for more info.
 ###Configuration
 You can set following options in your .zshrc.
 
-- **Display username:** `SHOW_USER`
+**Display username:** `SHOW_USER`
 - default: `true`
 
 
-- **Display IP address or host name:** `SHOW_IP`
+**Display IP address or host name:** `SHOW_IP`
 - default: `true`
 
-- **Display current time:** `SHOW_TIME`
+**Display current time:** `SHOW_TIME`
 - default: `false`
 
-- **Use single line in prompt:** `SINGLE_LINE`
+**Use single line in prompt:** `SINGLE_LINE`
 - default: `false`
 
-- **Display git status of current repo. For a large git repo, the prompt will be very slow!** `SHOW_GIT_STATUS`
+**Display git status of current repo. For a large git repo, the prompt will be very slow!** `SHOW_GIT_STATUS`
 - default: `true`
 
-- **Display branch name of current git repo. The priotity of this option is higher than `SHOW_GIT_STATUS`!** `SHOW_GIT_BRAHCH_ONLY`
+**Display branch name of current git repo. The priotity of this option is higher than `SHOW_GIT_STATUS`!** `SHOW_GIT_BRAHCH_ONLY`
 - default: `false`
 
-- **Display return code:** `SHOW_RETURN_CODE`
+**Display return code:** `SHOW_RETURN_CODE`
 - default: `true`
 
-- **Display symbol of current OS:** `SHOW_OS`
+**Display symbol of current OS:** `SHOW_OS`
 - default: `true`
 
-- **The the depth of parant directories:** `DIRECTORY_DEPTH`
+**The the depth of parant directories:** `DIRECTORY_DEPTH`
 - options:
 	- integer > 0
 - default: `4`
