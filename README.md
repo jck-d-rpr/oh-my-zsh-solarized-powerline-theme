@@ -95,3 +95,8 @@ You can set following options in your .zshrc.
 
 ###Other configuration
 In addition to what to display and what not to you can also select the foreground and background color for each of the aformentioned elements.
+
+###Thanks to
+Original project page [Powerline theme for oh-my-zsh](https://github.com/KuoE0/oh-my-zsh-solarized-powerline-theme).
+[The color generating script](http://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt) answer by krwoe.
+Random symbols in the prompt I first encountered in [here](https://github.com/narendraj9/dotfiles).
