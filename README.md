@@ -1,12 +1,16 @@
 #Powerline theme for oh-my-zsh
 The Powerline style prompt for oh-my-zsh.
 
+##Preview
+![powerline prompt](https://raw.github.com/jck-d-rpr/powerline-train/master/preview.png)
+![powerline prompt large](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-larger.png)
+![powerline prompt apple](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-apple-logo.png)
 
-###REQUIREMENTS
+###Requirements
 - Vim Powerline patched font: See [Powerline for vim](https://github.com/Lokaltog/vim-powerline.git) for more info.
 - Z shell (zsh): See [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for more info.
 
-###INSTALLATION
+###Installation
 **Manual / oh-my-zsh**
 
 1. Clone the repository.
@@ -36,7 +40,7 @@ antigen theme jck-d-rpr/oh-my-zsh-solarized-powerline-theme jckdrpr
 See [Antigen](https://github.com/zsh-users/antigen) for more info.
 
 
-###CONFIGURATION
+###Configuration
 You can set following options in your .zshrc.
 
 - **Display username:** `SHOW_USER`
