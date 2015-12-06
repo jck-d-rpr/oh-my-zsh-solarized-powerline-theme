@@ -1,11 +1,19 @@
+####################################
+######## My zsh prompt ############# 
+####################################
+
 # You can set following options in your .zshrc
 
 # OS detection
 [[ -n "${OS}" ]] || OS=$(uname)
 
-# Symbol foreground color
+##########################
+# THE COLORS. THE COLORS #
+##########################
+
+# Change these values to change color of any of the prompt elements
+# Symbol foreground and background color
 OS_LOGO_FG=7
-# Symbol background color
 OS_LOGO_BG=63
 
 # The username forground and background color
@@ -28,42 +36,36 @@ DIRECOTORY_BG=239
 GIT_PROMPT_FG=7
 GIT_PROMPT_BG=0
 
-# Random symbol prompt
-RANDOM_SYMBOL_FG=7
-RANDOM_SYMBOL_BG=1
+# Random symbol prompt fg and bg
+RANDOM_SYMBOL_FG=1
+RANDOM_SYMBOL_BG=7
 
-# select a prompt symbol for this terminal
-sym_list=(ϗ δ ζ ξ χ λ ϟ ϑ Σ λ Ɲ Ħ ƍ Ξ Θ Ϡ Ϟ)
-sym_len=${#sym_list[@]}
-sym_now=${sym_list[$((${RANDOM} % sym_len))]}
-
-# BUG:: change it later
-if [ $OS = "Darwin" ]; then
-	local LOGO=""
-else
-	local LOGO=""
-fi
-
-# reset color
-local RESET_COLOR=%f%k%b
-local RESET=%{$RESET_COLOR%}
-local RETURN_CODE="%(?..$FG_COLOR_RED%? ↵$RESET)"
-local ARROW_SYMBOL=''
-local ZSH_TIME=%D{%H:%M}
-local PADDING=' '
-
-# The seperator between the various prompt elements
-local SEPERATOR=${ARROW_SYMBOL}
-
+# The colors for the git prompt %F denotes start using the following number
+# as foreground color
 GIT_DIRTY_COLOR=%F{196}
 GIT_CLEAN_COLOR=%F{118}
 GIT_PROMPT_INFO=%F{012}
 
+
+############################
+# VALUES of various fields #
+############################
+
+# Change this value to change how date-time is displa
+local ZSH_TIME=%D{%H:%M}
+
+# The seperator between the various prompt elements
+# add more symbols here and change the value of the seperator
+local ARROW_SYMBOL=''
+local SEPERATOR=${ARROW_SYMBOL}
+
+# Modify these to get different symbols for various git statuses
 ZSH_THEME_GIT_PROMPT_PREFIX="  "
 ZSH_THEME_GIT_PROMPT_SUFFIX="$GIT_PROMPT_INFO"
 ZSH_THEME_GIT_PROMPT_DIRTY=" $GIT_DIRTY_COLOR✘"
 ZSH_THEME_GIT_PROMPT_CLEAN=" $GIT_CLEAN_COLOR✔"
 
+# More git statuses
 ZSH_THEME_GIT_PROMPT_ADDED="%F{082}✚%f"
 ZSH_THEME_GIT_PROMPT_MODIFIED="%F{166}✹%f"
 ZSH_THEME_GIT_PROMPT_DELETED="%F{160}✖%f"
@@ -71,25 +73,57 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%F{220]➜%f"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%F{082]═%f"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{190]✭%f"
 
+# Set the value of the logo here (Replace 'Linux' with the tux icon)
+if [ $OS = "Darwin" ]; then
+	local LOGO=""
+else
+	local LOGO="Linux"
+fi
+
 # option defaults
-[[ -n "$ZSH_POWERLINE_SHOW_USER" ]]             || ZSH_POWERLINE_SHOW_USER=true
-[[ -n "$ZSH_POWERLINE_SHOW_IP" ]]               || ZSH_POWERLINE_SHOW_IP=true
-[[ -n "$ZSH_POWERLINE_SHOW_OS" ]]               || ZSH_POWERLINE_SHOW_OS=true
-[[ -n "$ZSH_POWERLINE_SHOW_TIME" ]]             || ZSH_POWERLINE_SHOW_TIME=false
-[[ -n "$ZSH_POWERLINE_SINGLE_LINE" ]]           || ZSH_POWERLINE_SINGLE_LINE=false
-[[ -n "$SHOW_GIT_STATUS" ]]                     || SHOW_GIT_STATUS=true
-[[ -n "$SHOW_GIT_BRANCH" ]]                     || SHOW_GIT_BRANCH=false
-[[ -n "$ZSH_POWERLINE_SHOW_RETURN_CODE" ]]      || ZSH_POWERLINE_SHOW_RETURN_CODE=true
-[[ -n "$ZSH_POWERLINE_DIRECTORY_DEPTH" ]]       || ZSH_POWERLINE_DIRECTORY_DEPTH=2
+# Probably in the future I will add ordering to them 
+# so one can select the order in which the elements of the prompt
+# are displayed
+[[ -n "$SHOW_USER" ]]             || SHOW_USER=true
+[[ -n "$SHOW_IP" ]]               || SHOW_IP=true
+[[ -n "$SHOW_OS" ]]               || SHOW_OS=true
+[[ -n "$SHOW_TIME" ]]             || SHOW_TIME=false
+[[ -n "$SINGLE_LINE" ]]           || SINGLE_LINE=false
+[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=true
+[[ -n "$SHOW_GIT_BRANCH" ]]       || SHOW_GIT_BRANCH=false
+[[ -n "$SHOW_RETURN_CODE" ]]      || SHOW_RETURN_CODE=true
+[[ -n "$DIRECTORY_DEPTH" ]]       || DIRECTORY_DEPTH=4
+
+# select a prompt symbol for this terminal randomly 
+# (Go ahead add more symbols to this list)
+sym_list=(ϗ δ ζ ξ χ λ ϟ ϑ Σ λ Ɲ Ħ ƍ Ξ Θ Ϡ Ϟ)
+sym_len=${#sym_list[@]}
+# The random symbol that will be displayed
+sym_now=${sym_list[$((${RANDOM} % sym_len))]}
+
+# reset color
+local RESET_COLOR=%f%k%b
+local RESET=%{$RESET_COLOR%}
+local RETURN_CODE="%(?..$FG_COLOR_RED%? ↵$RESET)"
+local PADDING=' '
+
+#########################
+# Generating the prompt #
+#########################
 
 # a new line before prompt
 PROMPT="
 ${FG_COLOR_BASE0}${BG_COLOR_BASE3}"
 
+# Now the following lines contain the logic for generating the prompt based
+# on the values that are set in the above section.
+
+# Keeping track of which element will go first 
+# accordingly display or omit the seperator 
 local FIRST=true
 
 # OS logo followed by an arrow symbol
-if [ $ZSH_POWERLINE_SHOW_OS = true ]; then
+if [ $SHOW_OS = true ]; then
     # Use the predefined logo and it's color and append it to the prompt
     PROMPT="${PROMPT}%F{${OS_LOGO_FG}}%K{${OS_LOGO_BG}}${PADDING}${LOGO}"
     # defining what cshould be the color of the foreground of the seperator
@@ -99,8 +133,8 @@ if [ $ZSH_POWERLINE_SHOW_OS = true ]; then
 fi
 
 
-# username
-if [ $ZSH_POWERLINE_SHOW_USER = true ]; then
+# USERNAME
+if [ $SHOW_USER = true ]; then
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
     then
@@ -110,12 +144,13 @@ if [ $ZSH_POWERLINE_SHOW_USER = true ]; then
     local USER="%n"
     # use the predefined username config
     PROMPT="${PROMPT}%F{${USERNAME_FG}}%K{${USERNAME_BG}}${PADDING}${USER}"
+    # foreground color for the seperator
     PROMPT="${PROMPT} %F{${USERNAME_BG}}"
     FIRST=false
 fi
 
 # hostname
-if [ $ZSH_POWERLINE_SHOW_IP = true ]; then
+if [ $SHOW_IP = true ]; then
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
     then
@@ -136,10 +171,10 @@ if [ $ZSH_POWERLINE_SHOW_IP = true ]; then
 fi
 
 # datetime
-if [ $ZSH_POWERLINE_SHOW_TIME = true ]; then
+if [ $SHOW_TIME = true ]; then
     if [ $FIRST = false ]
     then
-        PROMPT="${PROMPT}%K{${HOSTNAME_BG}}${SEPERATOR}" 
+        PROMPT="${PROMPT}%K{${TIME_BG}}${SEPERATOR}" 
     fi
 
     PROMPT="${PROMPT}%F{${TIME_FG}}%K{${TIME_BG}}${PADDING}${ZSH_TIME}"
@@ -148,13 +183,14 @@ if [ $ZSH_POWERLINE_SHOW_TIME = true ]; then
 fi
 
 
-# current directory 
+# a seperator
 if [ $FIRST = false ]
 then
     PROMPT="${PROMPT}%K{${DIRECOTORY_BG}}${SEPERATOR}" 
 fi
 
-DIRECOTORY_DEPTH="%${ZSH_POWERLINE_DIRECTORY_DEPTH}~"
+# current directory
+DIRECOTORY_DEPTH="%${DIRECTORY_DEPTH}~"
 PROMPT="${PROMPT}%F{${DIRECOTORY_FG}}%K{${DIRECOTORY_BG}} ${DIRECOTORY_DEPTH}"
 PROMPT="${PROMPT} %F{${DIRECOTORY_BG}}"
 
@@ -188,7 +224,7 @@ fi
 
 
 # single line or double lines
-if [ $ZSH_POWERLINE_SINGLE_LINE = false ]; then
+if [ $SINGLE_LINE = false ]; then
     PROMPT="${PROMPT} %k${SEPERATOR}
 ${RESET}%F{${RANDOM_SYMBOL_FG}}%K{${RANDOM_SYMBOL_BG}} ${sym_now} "
     PROMPT="${PROMPT}%k%F{${RANDOM_SYMBOL_BG}}${ARROW_SYMBOL}"
@@ -200,7 +236,7 @@ fi
 # reset
 PROMPT="$PROMPT ${RESET} "
 
-if [ $ZSH_POWERLINE_SHOW_RETURN_CODE = true ]; then
+if [ $SHOW_RETURN_CODE = true ]; then
 	RPROMPT="${RETURN_CODE}"
 fi
 
