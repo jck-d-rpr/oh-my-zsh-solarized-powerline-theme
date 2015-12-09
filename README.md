@@ -3,14 +3,16 @@ The Powerline style prompt for oh-my-zsh.
 
 ##Preview
 The one with the apple logo
-![powerline prompt apple](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-apple-logo.png)
+![powerline prompt apple](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-apple-logo.png)
 
 The one with with the linux logo
-![powerline prompt](https://raw.github.com/jck-d-rpr/powerline-train/master/preview.png)
+![powerline prompt](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview.png)
 
-Just a larger one
-![powerline prompt large](https://raw.github.com/jck-d-rpr/powerline-train/master/preview-larger.png)
-
+Some more
+![2](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-2.png)
+![3](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-3.png)
+![4](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-4.png)
+![8](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-8.png)
 
 ###Requirements
 - Vim Powerline patched font: See [Powerline for vim](https://github.com/Lokaltog/vim-powerline.git) for more info.
