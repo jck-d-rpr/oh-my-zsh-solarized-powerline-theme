@@ -8,7 +8,8 @@ The one with the apple logo
 The one with with the linux logo
 ![powerline prompt](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview.png)
 
-Some more
+#####Some more
+
 ![2](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-2.png)
 ![3](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-3.png)
 ![4](https://raw.github.com/jck-d-rpr/powerline-train/master/previews/preview-4.png)
