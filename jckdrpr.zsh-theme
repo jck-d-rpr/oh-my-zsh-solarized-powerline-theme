@@ -84,10 +84,7 @@ fi
 # Probably in the future I will add ordering to them 
 # so one can select the order in which the elements of the prompt
 # are displayed
-[[ -n "$SHOW_USER" ]]             || SHOW_USER=true
 [[ -n "$SHOW_IP" ]]               || SHOW_IP=true
-[[ -n "$SHOW_OS" ]]               || SHOW_OS=true
-[[ -n "$SHOW_TIME" ]]             || SHOW_TIME=false
 [[ -n "$SINGLE_LINE" ]]           || SINGLE_LINE=false
 [[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=true
 [[ -n "$SHOW_GIT_BRANCH" ]]       || SHOW_GIT_BRANCH=false
@@ -111,6 +108,7 @@ local PADDING=' '
 # Generating the prompt #
 #########################
 
+
 # a new line before prompt
 PROMPT="
 ${FG_COLOR_BASE0}${BG_COLOR_BASE3}"
@@ -122,19 +120,25 @@ ${FG_COLOR_BASE0}${BG_COLOR_BASE3}"
 # accordingly display or omit the seperator 
 local FIRST=true
 
-# OS logo followed by an arrow symbol
-if [ $SHOW_OS = true ]; then
+
+# This function displays the operating system logo 
+show_os_logo() {
+    # append the seperator symbol only if it's not the first emenent
+    if [ $FIRST = false ]
+    then
+        PROMPT="${PROMPT}%K{${OS_LOGO_BG}}${SEPERATOR}"
+    fi
+
     # Use the predefined logo and it's color and append it to the prompt
     PROMPT="${PROMPT}%F{${OS_LOGO_FG}}%K{${OS_LOGO_BG}}${PADDING}${LOGO}"
     # defining what cshould be the color of the foreground of the seperator
     # i.e. same as the background color of the logo
     PROMPT="${PROMPT} %F{${OS_LOGO_BG}}"
     FIRST=false
-fi
+}
 
-
-# USERNAME
-if [ $SHOW_USER = true ]; then
+# This function displays the username
+show_username() {
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
     then
@@ -147,10 +151,11 @@ if [ $SHOW_USER = true ]; then
     # foreground color for the seperator
     PROMPT="${PROMPT} %F{${USERNAME_BG}}"
     FIRST=false
-fi
+}
 
-# hostname
-if [ $SHOW_IP = true ]; then
+# This function displays the hostname of the machine
+show_hostname() {
+    # hostname
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
     then
@@ -168,10 +173,11 @@ if [ $SHOW_IP = true ]; then
     PROMPT="${PROMPT}%F{${HOSTNAME_FG}}%K{${HOSTNAME_BG}}${PADDING}${IP}"
     PROMPT="${PROMPT} %F{${HOSTNAME_BG}}"
     FIRST=false
-fi
+}
+
 
 # datetime
-if [ $SHOW_TIME = true ]; then
+show_date_time() {
     if [ $FIRST = false ]
     then
         PROMPT="${PROMPT}%K{${TIME_BG}}${SEPERATOR}" 
@@ -180,63 +186,83 @@ if [ $SHOW_TIME = true ]; then
     PROMPT="${PROMPT}%F{${TIME_FG}}%K{${TIME_BG}}${PADDING}${ZSH_TIME}"
     PROMPT="${PROMPT} %F{${TIME_BG}}"
     FIRST=false
-fi
+}
 
+show_pwd() {
+    # a seperator
+    if [ $FIRST = false ]
+    then
+        PROMPT="${PROMPT}%K{${DIRECOTORY_BG}}${SEPERATOR}" 
+    fi
 
-# a seperator
-if [ $FIRST = false ]
-then
-    PROMPT="${PROMPT}%K{${DIRECOTORY_BG}}${SEPERATOR}" 
-fi
+    # current directory
+    DIRECOTORY_DEPTH="%${DIRECTORY_DEPTH}~"
+    PROMPT="${PROMPT}%F{${DIRECOTORY_FG}}%K{${DIRECOTORY_BG}} ${DIRECOTORY_DEPTH}"
+    PROMPT="${PROMPT} %F{${DIRECOTORY_BG}}"
+    FIRST=false
+}
 
-# current directory
-DIRECOTORY_DEPTH="%${DIRECTORY_DEPTH}~"
-PROMPT="${PROMPT}%F{${DIRECOTORY_FG}}%K{${DIRECOTORY_BG}} ${DIRECOTORY_DEPTH}"
-PROMPT="${PROMPT} %F{${DIRECOTORY_BG}}"
+show_git() {
+    # a seperator
+    if [ $FIRST = false ]
+    then
+        PROMPT="${PROMPT}%K{${GIT_PROMPT_BG}}${SEPERATOR}" 
+    fi
 
+    # GIT PROMPT DISPLAY
+    if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
+    then
+        PROMPT="${PROMPT}%F{${GIT_PROMPT_FG}}"
+    fi
 
-# GIT PROMPT DISPLAY
-if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
-then
-    PROMPT="${PROMPT}%K{${GIT_PROMPT_BG}}${SEPERATOR}"
-    PROMPT="${PROMPT}%F{${GIT_PROMPT_FG}}"
-fi
+    # show git status
+    if [ $SHOW_GIT_BRANCH = true ]; then
+        # get git branch function
+        git_branch() {
+            git rev-parse --git-dir > /dev/null 2>&1
+            if [ "$?" = "0" ]; then
+                BRANCH=$(git branch | grep '*' | cut -d' ' -f2-)
+                echo ${ZSH_THEME_GIT_PROMPT_PREFIX}${BRANCH}
+            fi
+        }
+        PROMPT="${PROMPT}"'$(git_branch)'
+    elif [ $SHOW_GIT_STATUS = true ]; then
+        PROMPT="${PROMPT}"'$(git_prompt_info)'
+    fi
 
-# show git status
-if [ $SHOW_GIT_BRANCH = true ]; then
-    # get git branch function
-    git_branch() {
-	git rev-parse --git-dir > /dev/null 2>&1
-	if [ "$?" = "0" ]; then
-            BRANCH=$(git branch | grep '*' | cut -d' ' -f2-)
-            echo ${ZSH_THEME_GIT_PROMPT_PREFIX}${BRANCH}
-	fi
-    }
-    PROMPT="${PROMPT}"'$(git_branch)'
-elif [ $SHOW_GIT_STATUS = true ]; then
-    PROMPT="${PROMPT}"'$(git_prompt_info)'
-fi
+    if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
+    then
+        PROMPT="${PROMPT} %F{${GIT_PROMPT_BG}}"
+    fi
+}
 
-if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
-then
-    PROMPT="${PROMPT} %F{${GIT_PROMPT_BG}}"
-fi
-
-
-# single line or double lines
-if [ $SINGLE_LINE = false ]; then
-    PROMPT="${PROMPT} %k${SEPERATOR}
+handle_single_line_or_double_line() {
+    # single line or double lines
+    if [ $SINGLE_LINE = false ]; then
+        PROMPT="${PROMPT} %k${SEPERATOR}
 ${RESET}%F{${RANDOM_SYMBOL_FG}}%K{${RANDOM_SYMBOL_BG}} ${sym_now} "
-    PROMPT="${PROMPT}%k%F{${RANDOM_SYMBOL_BG}}${ARROW_SYMBOL}"
-else
-    PROMPT="${PROMPT} %k${SEPERATOR}"
-fi
+        PROMPT="${PROMPT}%k%F{${RANDOM_SYMBOL_BG}}${ARROW_SYMBOL}"
+    else
+        PROMPT="${PROMPT} %k${SEPERATOR}"
+    fi
+}
+
+reset() {
+    # reset
+    PROMPT="$PROMPT ${RESET} "
+
+    if [ $SHOW_RETURN_CODE = true ]; then
+            RPROMPT="${RETURN_CODE}"
+    fi
+}
 
 
-# reset
-PROMPT="$PROMPT ${RESET} "
-
-if [ $SHOW_RETURN_CODE = true ]; then
-	RPROMPT="${RETURN_CODE}"
-fi
+show_username
+show_os_logo
+show_hostname
+# show_date_time
+show_pwd
+show_git
+handle_single_line_or_double_line
+reset
 
