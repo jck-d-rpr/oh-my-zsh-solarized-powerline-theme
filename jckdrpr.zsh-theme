@@ -6,6 +6,7 @@
 
 # OS detection
 [[ -n "${OS}" ]] || OS=$(uname)
+# source ~/.oh-my-zsh/extra_plugins/zsh-git-prompt/zshrc.sh
 
 ##########################
 # THE COLORS. THE COLORS #
@@ -51,7 +52,7 @@ GIT_PROMPT_INFO=%F{012}
 # VALUES of various fields #
 ############################
 
-# Change this value to change how date-time is displa
+# Change this value to change how date-time is displayed
 local ZSH_TIME=%D{%H:%M}
 
 # The seperator between the various prompt elements
@@ -73,7 +74,8 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%F{220]➜%f"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%F{082]═%f"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{190]✭%f"
 
-# Set the value of the logo here (Replace 'Linux' with the tux icon)
+# Set the value of the logo here
+# TODO
 if [ $OS = "Darwin" ]; then
 	local LOGO=""
 else
@@ -86,23 +88,25 @@ fi
 # are displayed
 [[ -n "$SHOW_IP" ]]               || SHOW_IP=true
 [[ -n "$SINGLE_LINE" ]]           || SINGLE_LINE=false
-[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=true
+[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=false
 [[ -n "$SHOW_GIT_BRANCH" ]]       || SHOW_GIT_BRANCH=false
 [[ -n "$SHOW_RETURN_CODE" ]]      || SHOW_RETURN_CODE=true
 [[ -n "$DIRECTORY_DEPTH" ]]       || DIRECTORY_DEPTH=4
+[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=true
 
 # select a prompt symbol for this terminal randomly 
 # (Go ahead add more symbols to this list)
-sym_list=(ϗ δ ζ ξ χ λ ϟ ϑ Σ λ Ɲ Ħ ƍ Ξ Θ Ϡ Ϟ)
-sym_len=${#sym_list[@]}
+SYMBOL_LIST=(ϗ δ ζ ξ χ λ ϟ ϑ Σ λ Ɲ Ħ ƍ Ξ Θ Ϡ Ϟ)
+SYMBOL_LIST_LENGTH=${#SYMBOL_LIST[@]}
 # The random symbol that will be displayed
-sym_now=${sym_list[$((${RANDOM} % sym_len))]}
+THE_CHOSSEN_SYMBOL=${SYMBOL_LIST[$((${RANDOM} % SYMBOL_LIST_LENGTH))]}
 
 # reset color
 local RESET_COLOR=%f%k%b
 local RESET=%{$RESET_COLOR%}
 local RETURN_CODE="%(?..$FG_COLOR_RED%? ↵$RESET)"
 local PADDING=' '
+
 
 #########################
 # Generating the prompt #
@@ -202,7 +206,66 @@ show_pwd() {
     FIRST=false
 }
 
+prompt_git() {
+    local s='';
+    local branchName=${ZSH_THEME_GIT_PROMPT_PREFIX};
+
+    # Check if the current directory is in a Git repository.
+    if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") = '0' ]; then
+
+        # check if the current directory is in .git before running git checks
+        if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" = 'false' ]; then
+
+            # Ensure the index is up to date.
+            git update-index --really-refresh -q &>/dev/null;
+
+            # Check for uncommitted changes in the index.
+            if ! $(git diff --quiet --ignore-submodules --cached); then
+                s+=${ZSH_THEME_GIT_PROMPT_DIRTY};
+            fi;
+
+            # Check for unstaged changes.
+            if ! $(git diff-files --quiet --ignore-submodules --); then
+                s+=${ZSH_THEME_GIT_PROMPT_MODIFIED};
+            fi;
+
+            # Check for untracked files.
+            if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+                s+=${ZSH_THEME_GIT_PROMPT_ADDED};
+            fi;
+
+            # Check for stashed files.
+            if $(git rev-parse --verify refs/stash &>/dev/null); then
+                s+='$';
+            fi;
+
+        fi;
+
+        # Get the short symbolic ref.
+        # If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
+        # Otherwise, just give up.
+        branchName+="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+                        git rev-parse --short HEAD 2> /dev/null || \
+                        echo '(unknown)')";
+
+        [ -n "${s}" ] && s=" ${s}";
+
+        echo -e "${1}${branchName}${s}";
+    else
+        return;
+    fi;
+}
+
+
 show_git() {
+    # get git branch function
+    git_branch() {
+        git rev-parse --git-dir > /dev/null 2>&1
+        if [ "$?" = "0" ]; then
+            BRANCH=$(git branch | grep '*' | cut -d' ' -f2-)
+            echo ${ZSH_THEME_GIT_PROMPT_PREFIX}${BRANCH}
+        fi
+    }
     # a seperator
     if [ $FIRST = false ]
     then
@@ -217,17 +280,11 @@ show_git() {
 
     # show git status
     if [ $SHOW_GIT_BRANCH = true ]; then
-        # get git branch function
-        git_branch() {
-            git rev-parse --git-dir > /dev/null 2>&1
-            if [ "$?" = "0" ]; then
-                BRANCH=$(git branch | grep '*' | cut -d' ' -f2-)
-                echo ${ZSH_THEME_GIT_PROMPT_PREFIX}${BRANCH}
-            fi
-        }
         PROMPT="${PROMPT}"'$(git_branch)'
     elif [ $SHOW_GIT_STATUS = true ]; then
-        PROMPT="${PROMPT}"'$(git_prompt_info)'
+        PROMPT="${PROMPT}"'$(prompt_git)'
+#    elif [ $SHOW_GIT_SUPER_PROMPT = true ]; then
+#        PROMPT="${PROMPT}"'$(git_super_status)'
     fi
 
     if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
@@ -240,7 +297,7 @@ handle_single_line_or_double_line() {
     # single line or double lines
     if [ $SINGLE_LINE = false ]; then
         PROMPT="${PROMPT} %k${SEPERATOR}
-${RESET}%F{${RANDOM_SYMBOL_FG}}%K{${RANDOM_SYMBOL_BG}} ${sym_now} "
+${RESET}%F{${RANDOM_SYMBOL_FG}}%K{${RANDOM_SYMBOL_BG}} ${THE_CHOSSEN_SYMBOL} "
         PROMPT="${PROMPT}%k%F{${RANDOM_SYMBOL_BG}}${ARROW_SYMBOL}"
     else
         PROMPT="${PROMPT} %k${SEPERATOR}"
@@ -256,12 +313,18 @@ reset() {
     fi
 }
 
+###########################################################
+# Change the order of the functions to get desired result #
+###########################################################
 
-show_username
 show_os_logo
+show_username
 show_hostname
 # show_date_time
 show_pwd
+
+# Don't touch these for the time being
+
 show_git
 handle_single_line_or_double_line
 reset
