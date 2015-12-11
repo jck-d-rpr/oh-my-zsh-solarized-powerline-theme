@@ -18,6 +18,7 @@ The one with with the linux logo
 ###Requirements
 - Vim Powerline patched font: See [Powerline for vim](https://github.com/Lokaltog/vim-powerline.git) for more info.
 - Z shell (zsh): See [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for more info.
+- (OPTIONAL) [GIT Super Prompt](https://github.com/olivierverdier/zsh-git-prompt).(The required code is included which too is optional)
 
 ###Installation
 **Manual / oh-my-zsh**
@@ -34,17 +35,14 @@ The one with with the linux logo
 	$ ln -s $PWD/jckdrpr.zsh-theme ~/.oh-my-zsh/themes
 	```
 
+3. (Optional) If you want to use the super git prompt copy the contents in the **zsh-git-prompt** folder to a desired loacation and source it on top the file  like 
+    ```source path/to/zshrc.sh``` and set the variable ```SHOW_GIT_SUPER_PROMPT``` to ```true```
+
 3. Configure the theme in your **.zshrc** file :
 
 	```
 	ZSH_THEME="jckdrpr"
 	```
-
-**Antigen**
-
-```
-antigen theme jck-d-rpr/oh-my-zsh-solarized-powerline-theme jckdrpr
-```
 
 See [Antigen](https://github.com/zsh-users/antigen) for more info.
 
@@ -52,20 +50,15 @@ See [Antigen](https://github.com/zsh-users/antigen) for more info.
 ###Configuration
 You can set following options in your .zshrc.
 
-**Display username:** `SHOW_USER`
-- default: `true`
-
-
-**Display IP address or host name:** `SHOW_IP`
-- default: `true`
-
-**Display current time:** `SHOW_TIME`
-- default: `false`
+Go to the end of file you will find some functions which you can rearange to get the desired prompt.
 
 **Use single line in prompt:** `SINGLE_LINE`
 - default: `false`
 
-**Display git status of current repo. For a large git repo, the prompt will be very slow!** `SHOW_GIT_STATUS`
+**Display git status(with lots of details) of current repo. For a large git repo, the prompt will be very slow!** `SHOW_GIT_SUPER_PROMPT`
+- default: `false`
+
+**Display git status of current repo. For a large git repo, the prompt will be slow!** `SHOW_GIT_STATUS`
 - default: `true`
 
 **Display branch name of current git repo. The priotity of this option is higher than `SHOW_GIT_STATUS`!** `SHOW_GIT_BRAHCH_ONLY`
@@ -83,10 +76,12 @@ You can set following options in your .zshrc.
 - default: `4`
 
 ###Other configuration
-In addition to what to display and what not to you can also select the foreground and background color for each of the aformentioned elements.
+In addition to what to display and where to, you can also select the foreground and background color for each of the aformentioned elements.
 
 ###Thanks to
 Original project page [Powerline theme for oh-my-zsh](https://github.com/KuoE0/oh-my-zsh-solarized-powerline-theme).
+
+olivierverdier for this awesome [super git prompt](https://github.com/olivierverdier/zsh-git-prompt)
 
 [The color generating script](http://unix.stackexchange.com/questions/124407/what-color-codes-can-i-use-in-my-ps1-prompt) answer by krwoe.
 

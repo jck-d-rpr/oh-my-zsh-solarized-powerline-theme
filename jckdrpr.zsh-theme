@@ -6,6 +6,9 @@
 
 # OS detection
 [[ -n "${OS}" ]] || OS=$(uname)
+
+# Path to the super_git_prompt 
+# You can comment it out if you don't want it
 # source ~/.oh-my-zsh/extra_plugins/zsh-git-prompt/zshrc.sh
 
 ##########################
@@ -88,11 +91,14 @@ fi
 # are displayed
 [[ -n "$SHOW_IP" ]]               || SHOW_IP=true
 [[ -n "$SINGLE_LINE" ]]           || SINGLE_LINE=false
-[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=false
+
+# Various git prompts (listed in order of prefrence)
+[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=true
 [[ -n "$SHOW_GIT_BRANCH" ]]       || SHOW_GIT_BRANCH=false
+[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=false
+
 [[ -n "$SHOW_RETURN_CODE" ]]      || SHOW_RETURN_CODE=true
 [[ -n "$DIRECTORY_DEPTH" ]]       || DIRECTORY_DEPTH=4
-[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=true
 
 # select a prompt symbol for this terminal randomly 
 # (Go ahead add more symbols to this list)
@@ -273,7 +279,7 @@ show_git() {
     fi
 
     # GIT PROMPT DISPLAY
-    if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
+    if [ $SHOW_GIT_BRANCH ] || [ $SHOW_GIT_STATUS ] || [ $SHOW_GIT_SUPER_PROMPT ]
     then
         PROMPT="${PROMPT}%F{${GIT_PROMPT_FG}}"
     fi
@@ -283,20 +289,20 @@ show_git() {
         PROMPT="${PROMPT}"'$(git_branch)'
     elif [ $SHOW_GIT_STATUS = true ]; then
         PROMPT="${PROMPT}"'$(prompt_git)'
-#    elif [ $SHOW_GIT_SUPER_PROMPT = true ]; then
-#        PROMPT="${PROMPT}"'$(git_super_status)'
+    elif [ $SHOW_GIT_SUPER_PROMPT = true ]; then
+        PROMPT="${PROMPT}"'$(git_super_status)'
     fi
 
-    if [ $SHOW_GIT_BRANCH = true ] || [ $SHOW_GIT_STATUS = true ]
+    if [ $SHOW_GIT_BRANCH ] || [ $SHOW_GIT_STATUS ] || [ $SHOW_GIT_SUPER_PROMPT ]
     then
-        PROMPT="${PROMPT} %F{${GIT_PROMPT_BG}}"
+        PROMPT="${PROMPT} ${RESET_COLOR}%F{${GIT_PROMPT_BG}}"
     fi
 }
 
 handle_single_line_or_double_line() {
     # single line or double lines
     if [ $SINGLE_LINE = false ]; then
-        PROMPT="${PROMPT} %k${SEPERATOR}
+        PROMPT="${PROMPT}%k${SEPERATOR}
 ${RESET}%F{${RANDOM_SYMBOL_FG}}%K{${RANDOM_SYMBOL_BG}} ${THE_CHOSSEN_SYMBOL} "
         PROMPT="${PROMPT}%k%F{${RANDOM_SYMBOL_BG}}${ARROW_SYMBOL}"
     else
