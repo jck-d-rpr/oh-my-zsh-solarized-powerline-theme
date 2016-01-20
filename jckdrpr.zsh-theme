@@ -9,7 +9,7 @@
 
 # Path to the super_git_prompt
 # You can comment it out if you don't want it
-source ~/.oh-my-zsh/extra_plugins/zsh-git-prompt/zshrc.sh
+# source ~/.oh-my-zsh/extra_plugins/zsh-git-prompt/zshrc.sh
 
 ##########################
 # THE COLORS. THE COLORS #
@@ -107,9 +107,9 @@ fi
 [[ -n "$SINGLE_LINE" ]]           || SINGLE_LINE=false
 
 # Various git prompts (listed in order of prefrence)
-[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=false
+[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=true
 [[ -n "$SHOW_GIT_BRANCH" ]]       || SHOW_GIT_BRANCH=false
-[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=true
+[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=false
 
 [[ -n "$SHOW_RETURN_CODE" ]]      || SHOW_RETURN_CODE=true
 [[ -n "$DIRECTORY_DEPTH" ]]       || DIRECTORY_DEPTH=4
