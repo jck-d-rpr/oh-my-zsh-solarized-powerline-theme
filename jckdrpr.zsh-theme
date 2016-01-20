@@ -1,5 +1,5 @@
 ####################################
-######## My zsh prompt ############# 
+######## My zsh prompt #############
 ####################################
 
 # You can set following options in your .zshrc
@@ -7,9 +7,9 @@
 # OS detection
 [[ -n "${OS}" ]] || OS=$(uname)
 
-# Path to the super_git_prompt 
+# Path to the super_git_prompt
 # You can comment it out if you don't want it
-# source ~/.oh-my-zsh/extra_plugins/zsh-git-prompt/zshrc.sh
+source ~/.oh-my-zsh/extra_plugins/zsh-git-prompt/zshrc.sh
 
 ##########################
 # THE COLORS. THE COLORS #
@@ -18,31 +18,45 @@
 # Change these values to change color of any of the prompt elements
 # Symbol foreground and background color
 OS_LOGO_FG=7
+# 7
 OS_LOGO_BG=63
+# 63
 
 # The username forground and background color
 USERNAME_FG=7
+# 7
 USERNAME_BG=32
+# 32
 
 # hostname foreground and background color
 HOSTNAME_FG=7
+# 7
 HOSTNAME_BG=4
+# 4
 
 # time fg and bg
 TIME_FG=7
+# 7
 TIME_BG=2
+# 2
 
 # directory fg and bg
 DIRECOTORY_FG=7
+# 7
 DIRECOTORY_BG=239
+# 239
 
 # GIT prompt fg and bg
 GIT_PROMPT_FG=7
-GIT_PROMPT_BG=0
+# 7
+GIT_PROMPT_BG=8
+# 0
 
 # Random symbol prompt fg and bg
 RANDOM_SYMBOL_FG=1
+# 1
 RANDOM_SYMBOL_BG=7
+# 7
 
 # The colors for the git prompt %F denotes start using the following number
 # as foreground color
@@ -82,25 +96,25 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{190]✭%f"
 if [ $OS = "Darwin" ]; then
 	local LOGO=""
 else
-	local LOGO=""
+	local LOGO=""
 fi
 
 # option defaults
-# Probably in the future I will add ordering to them 
+# Probably in the future I will add ordering to them
 # so one can select the order in which the elements of the prompt
 # are displayed
 [[ -n "$SHOW_IP" ]]               || SHOW_IP=true
 [[ -n "$SINGLE_LINE" ]]           || SINGLE_LINE=false
 
 # Various git prompts (listed in order of prefrence)
-[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=true
+[[ -n "$SHOW_GIT_STATUS" ]]       || SHOW_GIT_STATUS=false
 [[ -n "$SHOW_GIT_BRANCH" ]]       || SHOW_GIT_BRANCH=false
-[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=false
+[[ -n "$SHOW_GIT_SUPER_PROMPT" ]] || SHOW_GIT_SUPER_PROMPT=true
 
 [[ -n "$SHOW_RETURN_CODE" ]]      || SHOW_RETURN_CODE=true
 [[ -n "$DIRECTORY_DEPTH" ]]       || DIRECTORY_DEPTH=4
 
-# select a prompt symbol for this terminal randomly 
+# select a prompt symbol for this terminal randomly
 # (Go ahead add more symbols to this list)
 SYMBOL_LIST=(ϗ δ ζ ξ χ λ ϟ ϑ Σ λ Ɲ Ħ ƍ Ξ Θ Ϡ Ϟ)
 SYMBOL_LIST_LENGTH=${#SYMBOL_LIST[@]}
@@ -126,12 +140,12 @@ ${FG_COLOR_BASE0}${BG_COLOR_BASE3}"
 # Now the following lines contain the logic for generating the prompt based
 # on the values that are set in the above section.
 
-# Keeping track of which element will go first 
-# accordingly display or omit the seperator 
+# Keeping track of which element will go first
+# accordingly display or omit the seperator
 local FIRST=true
 
 
-# This function displays the operating system logo 
+# This function displays the operating system logo
 show_os_logo() {
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
@@ -152,7 +166,7 @@ show_username() {
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
     then
-        PROMPT="${PROMPT}%K{${USERNAME_BG}}${SEPERATOR}" 
+        PROMPT="${PROMPT}%K{${USERNAME_BG}}${SEPERATOR}"
     fi
 
     local USER="%n"
@@ -169,9 +183,9 @@ show_hostname() {
     # append the seperator symbol only if it's not the first emenent
     if [ $FIRST = false ]
     then
-        PROMPT="${PROMPT}%K{${HOSTNAME_BG}}${SEPERATOR}" 
+        PROMPT="${PROMPT}%K{${HOSTNAME_BG}}${SEPERATOR}"
     fi
-    
+
     if [ "$(echo $IP | grep 200)" = "" ]; then
         IP=`curl -si --max-time 2 http://ipecho.net/plain`
         # no network connection, use hostname
@@ -190,7 +204,7 @@ show_hostname() {
 show_date_time() {
     if [ $FIRST = false ]
     then
-        PROMPT="${PROMPT}%K{${TIME_BG}}${SEPERATOR}" 
+        PROMPT="${PROMPT}%K{${TIME_BG}}${SEPERATOR}"
     fi
 
     PROMPT="${PROMPT}%F{${TIME_FG}}%K{${TIME_BG}}${PADDING}${ZSH_TIME}"
@@ -202,7 +216,7 @@ show_pwd() {
     # a seperator
     if [ $FIRST = false ]
     then
-        PROMPT="${PROMPT}%K{${DIRECOTORY_BG}}${SEPERATOR}" 
+        PROMPT="${PROMPT}%K{${DIRECOTORY_BG}}${SEPERATOR}"
     fi
 
     # current directory
@@ -275,7 +289,7 @@ show_git() {
     # a seperator
     if [ $FIRST = false ]
     then
-        PROMPT="${PROMPT}%K{${GIT_PROMPT_BG}}${SEPERATOR}" 
+        PROMPT="${PROMPT}%K{${GIT_PROMPT_BG}}${SEPERATOR}"
     fi
 
     # GIT PROMPT DISPLAY
@@ -334,4 +348,3 @@ show_pwd
 show_git
 handle_single_line_or_double_line
 reset
-
